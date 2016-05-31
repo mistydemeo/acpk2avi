@@ -90,9 +90,9 @@ public:
       (((INT64)dword(buf[0], buf[1], buf[2], buf[3])) << 32) |
       (((INT64)dword(buf[4], buf[5], buf[6], buf[7]))      );
     INT64 mask1 = ((INT64)0xffff0000) << 32;
-    f = (f & mask1) | ((f << 1) & ‾mask1);
+    f = (f & mask1) | ((f << 1) & ~mask1);
     INT64 mask2 = ((INT64)0xc0000000) << 32;
-    f = (f & mask2) | ((f << 4) & ‾mask2);
+    f = (f & mask2) | ((f << 4) & ~mask2);
     return *(double *)&f;
   }
   

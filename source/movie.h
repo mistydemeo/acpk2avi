@@ -79,7 +79,7 @@ public:
       sizeof_buf(0),
       TotalFrame(0) { }
 
-  ‾Movie() { delete [] movie_record; delete [] audio_record; }
+  ~Movie() { delete [] movie_record; delete [] audio_record; }
   
   // いろいろ
   File *GetIfp(void) { return ifp; }
@@ -516,7 +516,7 @@ public:
 	
 	offset += offset_base;
 	
-	if ((ckid & ‾0xffff) == dword('0', '1', 0, 0)
+	if ((ckid & ~0xffff) == dword('0', '1', 0, 0)
 	    /* ckid == dword("01wb") */)
 	{
 	  audio_record[num_of_audio_record].address = offset;
@@ -527,7 +527,7 @@ public:
 	  num_of_audio_record++;
 	  total_audio_size += length;
 	}
-	else if ((ckid & ‾0xffff) == dword('0', '0', 0, 0)
+	else if ((ckid & ~0xffff) == dword('0', '0', 0, 0)
 		 /* ckid == dword("00dc") */)
 	{
 	  if (0 < num_of_movie_record &&

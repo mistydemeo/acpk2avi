@@ -284,7 +284,7 @@ public:
     adp_pcm_r[27] = 0;
   }
   
-  ‾Audio()
+  ~Audio()
   {
     delete [] read_audio_buf;
     delete [] buf;

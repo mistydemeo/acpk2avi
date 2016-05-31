@@ -59,7 +59,7 @@ struct AviIndex // for idx1
   
   AviIndex(Type t, long a, long s, double ti)
     : type(t), address(a), size(s), time(ti), next(NULL) { }
-  ‾AviIndex() { delete next; }
+  ~AviIndex() { delete next; }
 } *avi_index;
 
 

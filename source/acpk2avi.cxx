@@ -25,10 +25,7 @@ extern "C"
 typedef int BOOL;
 const int TRUE = 1;
 const int FALSE = 0;
-#if defined(__GNUC__)
-  #include <_G_config.h>
-  typedef _G_int64_t INT64;
-#elif defined(_WIN32)
+#if defined(_WIN32)
   typedef __int64 INT64;
 #else
   typedef long long INT64;

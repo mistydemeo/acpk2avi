@@ -1,0 +1,18 @@
+# Makefile for gcc -*- makefile -*-
+
+CC		=	gcc
+#CXXFLAGS	=	-O0 -g -Wall
+CXXFLAGS	=	-O1
+#LDFLAGS		=	-g
+SHELL		=	bash
+
+%.o: %.cxx
+	$(COMPILE.cc) $< $(OUTPUT_OPTION)
+
+all:		acpk2avi
+
+acpk2avi:	acpk2avi.o
+acpk2avi.o:	audio.h movie.h filemisc.h
+
+clean:
+	$(RM) acpk2avi acpk2avi.exe *.o *~ .[^.]*~ "#"*

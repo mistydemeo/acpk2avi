@@ -1,0 +1,22 @@
+# Makefile for Visual C++ 5.0 -*- makefile -*-
+
+# RELEASE: nmake -f Makefile.vc nodebug=1
+#   DEBUG: nmake -f Makefile.vc
+
+APPVER		=	4.0
+TARGETOS	=	BOTH
+!include <win32.mak>
+
+RM		=	del
+
+.cxx.obj:
+	$(cc) $(cdebug) $(cflags) $(cvars) /Tp$*.cxx
+
+all:		acpk2avi.exe
+
+acpk2avi.exe:	acpk2avi.obj
+	$(link) $(ldebug) $(conlflags) $(conlibs) $** -out:acpk2avi.exe
+acpk2avi.obj:	audio.h movie.h filemisc.h
+
+clean:
+	$(RM) acpk2avi.exe *.obj

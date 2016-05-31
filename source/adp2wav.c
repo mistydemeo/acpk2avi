@@ -299,7 +299,7 @@ long read_aiff_header(FILE *fp_adp, long *freq, int *channels)
 	fprintf(stderr, "bits/sample : %d\n", bitspersample);
 
 	shift = 0x100 * (d[8] & 0x7f) + d[9];
-	f = 0x1000000 * d[10] + 0x10000 * d[11] + 0x100 * d[12] + d[13];
+	f = 0x1000000 * (unsigned long)d[10] + 0x10000 * (unsigned long)d[11] + 0x100 * (unsigned long)d[12] + (unsigned long)d[13];
 	f >>= (0x401e - shift);
 	*freq = (long)f;
 	fprintf(stderr, "Sampling frequency : %ld\n", *freq);

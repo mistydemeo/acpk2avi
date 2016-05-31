@@ -6,7 +6,7 @@
 #define __filemisc_h__
 
 
-// ERROR(const char *), BYTE, WORD, DWORD, INT64 ‚Í‚ ‚ç‚©‚¶‚ßİ’è‚µ‚Ä‚¨‚­‚±‚Æ
+// ERROR(const char *), BYTE, WORD, DWORD, INT64 ã¯ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã—ã¦ãŠãã“ã¨
 
 
 inline DWORD dword(BYTE a, BYTE b, BYTE c, BYTE d)
@@ -36,7 +36,7 @@ public:
   
   File(FILE *_fp = NULL) : fp(_fp) { }
   
-  // “Ç‚ŞŠÖ”ŒQ
+  // èª­ã‚€é–¢æ•°ç¾¤
   
   void read_BYTES(BYTE *buf, int size)
   {
@@ -45,28 +45,28 @@ public:
   }
   void read_BYTES(char *buf, int size) { read_BYTES((BYTE *)buf, size); }
   
-  DWORD read_DWORD_b(void) // big endien DWORD ‚ğ“Ç‚Ş
+  DWORD read_DWORD_b(void) // big endien DWORD ã‚’èª­ã‚€
   {
     BYTE buf[4];
     read_BYTES(buf, 4);
     return dword(buf[0], buf[1], buf[2], buf[3]);
   }
   
-  WORD read_WORD_b(void) // big endien WORD ‚ğ“Ç‚Ş
+  WORD read_WORD_b(void) // big endien WORD ã‚’èª­ã‚€
   {
     BYTE buf[2];
     read_BYTES(buf, 2);
     return word(buf[0], buf[1]);
   }
   
-  DWORD read_DWORD_l(void) // little endien DWORD ‚ğ“Ç‚Ş
+  DWORD read_DWORD_l(void) // little endien DWORD ã‚’èª­ã‚€
   {
     BYTE buf[4];
     read_BYTES(buf, 4);
     return dword(buf[3], buf[2], buf[1], buf[0]);
   }
 
-  WORD read_WORD_l(void) // little endien WORD ‚ğ“Ç‚Ş
+  WORD read_WORD_l(void) // little endien WORD ã‚’èª­ã‚€
   {
     BYTE buf[2];
     read_BYTES(buf, 2);
@@ -81,8 +81,8 @@ public:
   }
   
   double read_FLOAT80_b(void)
-    // big endien 80bit float ‚ğ“Ç‚Ş
-    // double ‚Ì“à•”•\Œ»‚ª IEEE ”{¸“x•‚“®¬”“_ƒtƒH[ƒ}ƒbƒg‚É€‹’‚µ‚Ä‚¢‚é‚±‚Æ
+    // big endien 80bit float ã‚’èª­ã‚€
+    // double ã®å†…éƒ¨è¡¨ç¾ãŒ IEEE å€ç²¾åº¦æµ®å‹•å°æ•°ç‚¹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«æº–æ‹ ã—ã¦ã„ã‚‹ã“ã¨
   {
     BYTE buf[10];
     read_BYTES(buf, 10);
@@ -90,19 +90,19 @@ public:
       (((INT64)dword(buf[0], buf[1], buf[2], buf[3])) << 32) |
       (((INT64)dword(buf[4], buf[5], buf[6], buf[7]))      );
     INT64 mask1 = ((INT64)0xffff0000) << 32;
-    f = (f & mask1) | ((f << 1) & ~mask1);
+    f = (f & mask1) | ((f << 1) & â€¾mask1);
     INT64 mask2 = ((INT64)0xc0000000) << 32;
-    f = (f & mask2) | ((f << 4) & ~mask2);
+    f = (f & mask2) | ((f << 4) & â€¾mask2);
     return *(double *)&f;
   }
   
-  void read_skip(int size) // “Ç‚İ”ò‚Î‚·
+  void read_skip(int size) // èª­ã¿é£›ã°ã™
   {
     if (fseek(fp, size, SEEK_CUR) != 0)
       ERROR("read error");
   }
   
-  // ‘‚­ŠÖ”ŒQ
+  // æ›¸ãé–¢æ•°ç¾¤
   
   void write_BYTES(const BYTE *data, int size)
   {
@@ -111,14 +111,14 @@ public:
   }
   void write_FOURCC(const char *data) { write_BYTES((const BYTE *)data, 4); }
   
-  void write_DWORD_l(DWORD data) // little endien DWORD ‚Å‘‚­
+  void write_DWORD_l(DWORD data) // little endien DWORD ã§æ›¸ã
   {
     BYTE buf[4] = { (BYTE)(data      ), (BYTE)(data >>  8),
 		    (BYTE)(data >> 16), (BYTE)(data >> 24), };
     write_BYTES(buf, 4);
   }
   
-  void write_WORD_l(WORD data) // little endien WORD ‚Å‘‚­
+  void write_WORD_l(WORD data) // little endien WORD ã§æ›¸ã
   {
     BYTE buf[2] = { (BYTE)(data      ), (BYTE)(data >>  8), };
     write_BYTES(buf, 2);
@@ -129,14 +129,14 @@ public:
     write_BYTES(&data, 1);
   }
   
-  long check_length(void) // ‚ ‚Æ‚Å‘å‚«‚³‚ğ‘‚­‚½‚ß‚Ìƒ`ƒFƒbƒN
+  long check_length(void) // ã‚ã¨ã§å¤§ãã•ã‚’æ›¸ããŸã‚ã®ãƒã‚§ãƒƒã‚¯
   {
     write_DWORD_l(0);
     return ftell();
   }
   long check_place(void) { return check_length(); }
   
-  long write_length(long from) // check_length ‚Åw’è‚µ‚½ˆÊ’u‚É’·‚³‚ğ‘‚­
+  long write_length(long from) // check_length ã§æŒ‡å®šã—ãŸä½ç½®ã«é•·ã•ã‚’æ›¸ã
   {
     long to = ftell();
     if (to < 0)
@@ -150,7 +150,7 @@ public:
     return length;
   }
   
-  void write_DWORD_at(long place, DWORD data) // check_place ‚µ‚½ˆÊ’u‚É’l‚ğ‘‚­
+  void write_DWORD_at(long place, DWORD data) // check_place ã—ãŸä½ç½®ã«å€¤ã‚’æ›¸ã
   {
     long now = ftell();
     if (now < 0)
@@ -160,9 +160,9 @@ public:
     jump_to(now);
   }
 
-  // ‚»‚Ì‘¼
+  // ãã®ä»–
   
-  void jump_to(int to) // ƒV[ƒN
+  void jump_to(int to) // ã‚·ãƒ¼ã‚¯
   {
     if (fseek(fp, to, SEEK_SET) != 0)
       ERROR("seek error");

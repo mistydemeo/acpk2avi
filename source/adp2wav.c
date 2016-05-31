@@ -2,43 +2,43 @@
  * Copyright (C) 1997 Nobuyuki Nishizawa <nishi@gavo.t.u-tokyo.ac.jp>
  */
 
-/* �Z�K�T�^�[���ŃG���@���Q���I��.adp�t�@�C��->.wav�R���o�[�^ */
+/* セガサターン版エヴァンゲリオン.adpファイル->.wavコンバータ */
 
-/* ����
+/* 履歴
  *  version 0.1 [97/05/13]
- *   �ŏ��̃o�[�W�����B
+ *   最初のバージョン。
  *  version 0.2 {97/05/14]
- *   ���m�����ȃt�@�C���̏o�͂����܂������Ȃ������̂��C���B
- *   �R�����g�����M�E�C��
+ *   モノラルなファイルの出力がうまくいかなかったのを修正。
+ *   コメントを加筆・修正
  *  version 0.21 [97/05/14]
- *   0.2�̏C���͕s�\��(�o�͕��̃f�[�^�T�C�Y�Z�o�Ɍ�肪������)�̂��C���B
- *   �R�����g�̏C���B
+ *   0.2の修正は不十分(出力部のデータサイズ算出に誤りがあった)のを修正。
+ *   コメントの修正。
  *  version 0.22 [97/05/16]
- *   C++�\�[�X�Ƃ��ăR���p�C���ł��Ȃ��_(�Öق̃L���X�g�ɂ��x���E�G���[)
- *   ���C���B(acpk2avi�΍�)
+ *   C++ソースとしてコンパイルできない点(暗黙のキャストによる警告・エラー)
+ *   を修正。(acpk2avi対策)
  *  version 0.23 [97/09/11]
- *   �T���v�����O���g���v�Z�ɂ�����A���������_���Z�̃o�O�̏C��
+ *   サンプリング周波数計算における、浮動小数点演算のバグの修正
  */
 
-/* �Z�K�T�^�[���ŃG���@���Q���I��
- * .adp�t�@�C���̍\��(����)
+/* セガサターン版エヴァンゲリオン
+ * .adpファイルの構造(推測)
  *
  * -------------------------------------
- * �^��`
- *   CARD8  : ��������8�r�b�g����
- *   CARD16 : ��������16�r�b�g����
- *   CARD32 : ��������32�r�b�g����
- *   FLOAT80: 80�r�b�g���������_��
- *   ����1�r�b�g�A�w����15�r�b�g�A������64�r�b�g�Ǝv����B
- *   �����Intel��temporary real�`���ɓ������B
- *   �Ȃ��������̓P�`�\��(economized representation)�ł͂Ȃ��̂Œ��ӁB
- *   �w�����̓o�C�A�X�\���ł���B
- *   ���ꂪIEEE�����Ȃ̂��ǂ��������͒m��Ȃ�(^^; )
+ * 型定義
+ *   CARD8  : 符号無し8ビット整数
+ *   CARD16 : 符号無し16ビット整数
+ *   CARD32 : 符号無し32ビット整数
+ *   FLOAT80: 80ビット浮動小数点数
+ *   符号1ビット、指数部15ビット、仮数部64ビットと思われる。
+ *   これはIntelのtemporary real形式に等しい。
+ *   なお仮数部はケチ表現(economized representation)ではないので注意。
+ *   指数部はバイアス表現である。
+ *   これがIEEE準拠なのかどうかを私は知らない(^^; )
  * -------------------------------------
  * 
- * .adp�t�@�C���̊�{�I�ȍ\����AIFF�ł���B
- * �\���͈ȉ��̒ʂ�B
- * �������o�C�g�I�[�_��68000�ɓ�����(���Ȃ킿big-endian)�B
+ * .adpファイルの基本的な構造はAIFFである。
+ * 構造は以下の通り。
+ * ただしバイトオーダは68000に等しい(すなわちbig-endian)。
  *
  * AIFF_chank:
  *      FORM_chank form
@@ -64,48 +64,48 @@
  *      CARD32      block_size
  *      XA_BLOCK    xa_block[n]      ;n = (size - 8) / block_size (?)
  *
- * �T�E���h�f�[�^��CD-XA type-C(B?)�݊���ADPCM�ƍl������B(Fs = 18.9kHz)
- * XA_ADPCM���̍\���͈ȉ��̒ʂ�Ɛ��������B
- * (�Q�l:xa2wave.c �������� ��)
+ * サウンドデータはCD-XA type-C(B?)互換のADPCMと考えられる。(Fs = 18.9kHz)
+ * XA_ADPCM部の構造は以下の通りと推測される。
+ * (参考:xa2wave.c 佐藤正徳 氏)
  *
  * XA_BLOCK:
  *      XA_ADPCM    xa_adpcm[18]
  *      CARD8       unknown[20]
  *
  * XA_ADPCM:
- *      CARD8       sf_and_filter[16]   ;���4�r�b�g:�X�P�[���t�@�N�^
- *                                      ;����4�r�b�g:�t�B���^�萔�I��
- *      CARD8       adpcm_data[112]     ;244�T���v��adpcm�f�[�^
- *                                      ;(1�T���v��4�r�b�g)
- * (�f�R�[�h�̏ڍׂɂ��Ă̓\�[�X�����Ă�������(^^;)
+ *      CARD8       sf_and_filter[16]   ;上位4ビット:スケールファクタ
+ *                                      ;下位4ビット:フィルタ定数選択
+ *      CARD8       adpcm_data[112]     ;244サンプルadpcmデータ
+ *                                      ;(1サンプル4ビット)
+ * (デコードの詳細についてはソースを見てください(^^;)
  *
- * �Ȃ�sf_and_filter��4�o�C�g��1�u���b�N�Ƃ��A�����f�[�^��
- * ���ꂼ��2��A�����Ă���悤�ł��邪�A
- * ���ꂪXA�̋K�i�㋁�߂��Ă��邩�ǂ����͕s���ł���B
- * (XA ADPCM�ɂ��Ă͕ʂɉ����������������܂���B)
+ * なおsf_and_filterが4バイトを1ブロックとし、同じデータが
+ * それぞれ2回連続しているようであるが、
+ * これがXAの規格上求められているかどうかは不明である。
+ * (XA ADPCMについては別に解説を書くかもしれません。)
  *
- * ��1) ������قƂ�Ǐ����I��������
- *  http://nanya-www.cs.titech.ac.jp/~yatsushi/xaadpcm.html (�R�� �~ ��)
- *  �ɂ�XA ADPCM�̉��������̂��������B
- *  ���̍�ҒB�͂ǂ̂悤�ɂ���XA ADPCM�̃t�H�[�}�b�g�𓾂��̂ł��낤���B
+ * 注1) これをほとんど書き終わった後で
+ *  http://nanya-www.cs.titech.ac.jp/‾yatsushi/xaadpcm.html (山崎 淳 氏)
+ *  にもXA ADPCMの解説があるのを見つけた。
+ *  この作者達はどのようにしてXA ADPCMのフォーマットを得たのであろうか。
  *
- * ��2) xa2wave.c�̎����ł̓m�C�Y������\��������B
- *  ���̌�����2�l�����A�f�R�[�_��IIR�t�B���^�̏����l���u���b�N���Ƃ�
- *  0�N���A���Ă��邱�ƂƁAIIR�t�B���^�̏�Z���Ɍv�Z���ʂ��I�[�o�t���[����
- *  ���Ƃ��L�肤�邱�Ƃł���B(��҂͎��ۂɊm�F�����킯�ł͂Ȃ����B)
+ * 注2) xa2wave.cの実装ではノイズが入る可能性がある。
+ *  この原因は2つ考えられ、デコーダのIIRフィルタの初期値をブロックごとに
+ *  0クリアしていることと、IIRフィルタの乗算時に計算結果がオーバフローする
+ *  ことが有りうることである。(後者は実際に確認したわけではないが。)
  *
- * ��3) �����_�ł͍������E�R�莁�Ƃ��ɗ����𓾂Ă��Ȃ����߁A
- *  ���̃t�@�C���̔z�z�͂܂������ł���(^^;
+ * 注3) 現時点では佐藤氏・山崎氏ともに了解を得ていないため、
+ *  このファイルの配布はまずそうである(^^;
  */
 
-/* ���o�[�W�����ɂ�������_
+/* 現バージョンにおける問題点
  * 
- * .adp�iAIFF)�̃`�F�b�N���s�\���B
- * ����m�F�������Ȃ�����B
+ * .adp（AIFF)のチェックが不十分。
+ * 動作確認環境が少なすぎる。
  *
- * ����m�F��
- * VC++4.1(NT4.0) 4000.adp�ɂ��Ă̂݃R���o�[�g�ł��邱�Ƃ��m�F�B
- * ���̑��̃t�@�C���͎����Ă��Ȃ�(�����悤���Ȃ�(^^; )
+ * 動作確認環境
+ * VC++4.1(NT4.0) 4000.adpについてのみコンバートできることを確認。
+ * その他のファイルは試していない(試しようがない(^^; )
  */
 
 
@@ -161,11 +161,11 @@ int main(int argc, char *argv[])
 	INT16 pcm_l[28];
 	INT16 pcm_r[28];
 
-	fprintf(stderr, "adp2wav version 0.22  Copyright (C) 1997 Nobuyuki NISHIZAWA\n");
+	fprintf(stderr, "adp2wav version 0.22  Copyright (C) 1997 Nobuyuki NISHIZAWA¥n");
 
 	if (argc != 3)
 	{
-		fprintf(stderr, "Usage: adp2wav <input.adp> <output.wav>\n");
+		fprintf(stderr, "Usage: adp2wav <input.adp> <output.wav>¥n");
 		return 255;
 	}
 
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 	fp_wav = fopen(argv[2], "wb");
 	if (fp_adp == NULL || fp_wav == NULL)
 	{
-		fprintf(stderr, "Error: cannot open file.\n");
+		fprintf(stderr, "Error: cannot open file.¥n");
 	}
 
 	num_block = read_aiff_header(fp_adp, &freq, &channels);
@@ -276,38 +276,38 @@ long read_aiff_header(FILE *fp_adp, long *freq, int *channels)
 	fread(d, 12, 1, fp_adp);
 	if (memcmp(d, form, 4) != 0 || memcmp(d + 8, aiff, 4) != 0)
 	{
-		fprintf(stderr, "not aiff file.\n");
+		fprintf(stderr, "not aiff file.¥n");
 		exit(255);
 	}
 
 	fread(d, 8, 1, fp_adp);
 	if (memcmp(d, comm, 4) != 0)
 	{
-		fprintf(stderr, "unsupported aiff file.\n");
+		fprintf(stderr, "unsupported aiff file.¥n");
 		exit(255);
 	}
 	size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
 	fread(d, size, 1, fp_adp);
 
 	*channels = 0x100 * d[0] + d[1];
-	fprintf(stderr, "Channels : %d\n", *channels);
+	fprintf(stderr, "Channels : %d¥n", *channels);
 	
 	samples = 0x1000000 * d[2] + 0x10000 * d[3] + 0x100 * d[4] + d[5];
-	fprintf(stderr, "Samples : %ld\n", samples);
+	fprintf(stderr, "Samples : %ld¥n", samples);
 
 	bitspersample = 0x100 * d[6] + d[7];
-	fprintf(stderr, "bits/sample : %d\n", bitspersample);
+	fprintf(stderr, "bits/sample : %d¥n", bitspersample);
 
 	shift = 0x100 * (d[8] & 0x7f) + d[9];
 	f = 0x1000000 * d[10] + 0x10000 * d[11] + 0x100 * d[12] + d[13];
 	f >>= (0x401e - shift);
 	*freq = (long)f;
-	fprintf(stderr, "Sampling frequency : %ld\n", *freq);
+	fprintf(stderr, "Sampling frequency : %ld¥n", *freq);
 
 	fread(d, 8, 1, fp_adp);
 	if (memcmp(d, apcm, 4) != 0)
 	{
-		fprintf(stderr, "not ADPCM(XA) file.\n");
+		fprintf(stderr, "not ADPCM(XA) file.¥n");
 		exit(255);
 	}
 	size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
@@ -316,7 +316,7 @@ long read_aiff_header(FILE *fp_adp, long *freq, int *channels)
 	block_size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
 	if (block_size != sizeof(XA_BLOCK))
 	{
-		fprintf(stderr, "unsupported XA format.\n");
+		fprintf(stderr, "unsupported XA format.¥n");
 		exit(255);
 	}
 	
@@ -400,11 +400,11 @@ int get_adpcm_data(XA_ADPCM *adpcm, int unit, int i)
 
 int get_adpcm_filter(XA_ADPCM *adpcm, int unit)
 {
-	/* sf/filter��2�A������4�o�C�g�̒l���Ⴄ�Ƃ��x���𔭂��� */
+	/* sf/filterの2個連続する4バイトの値が違うとき警告を発する */
 	if (adpcm->sf_and_filter[(unit / 4) * 8 + unit % 4] !=
 		adpcm->sf_and_filter[(unit / 4) * 8 + unit % 4 + 4])
 	{
-		fprintf(stderr, "CAUTION! Check scalefactor or filter value!\n"); 
+		fprintf(stderr, "CAUTION! Check scalefactor or filter value!¥n"); 
 	}	
 	return adpcm->sf_and_filter[4 + unit] >> 4;
 }

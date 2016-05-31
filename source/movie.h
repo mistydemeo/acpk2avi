@@ -45,7 +45,7 @@ private:
   int sizeof_buf;
 
 private:
-  // buf ‚É size ƒoƒCƒg“ü‚é‚æ‚¤‚É’²ß‚·‚é
+  // buf ã« size ãƒã‚¤ãƒˆå…¥ã‚‹ã‚ˆã†ã«èª¿ç¯€ã™ã‚‹
   void check_buf(int size)
   {
     if (sizeof_buf < size)
@@ -56,7 +56,7 @@ private:
   }
   
 public:
-  int TotalFrame; // AVI ‚É‘‚­ƒtƒŒ[ƒ€‚Ì‘”
+  int TotalFrame; // AVI ã«æ›¸ããƒ•ãƒ¬ãƒ¼ãƒ ã®ç·æ•°
   
   Movie(File *_ifp)
     : ifp(_ifp),
@@ -79,9 +79,9 @@ public:
       sizeof_buf(0),
       TotalFrame(0) { }
 
-  ~Movie() { delete [] movie_record; delete [] audio_record; }
+  â€¾Movie() { delete [] movie_record; delete [] audio_record; }
   
-  // ‚¢‚ë‚¢‚ë
+  // ã„ã‚ã„ã‚
   File *GetIfp(void) { return ifp; }
   int GetAudioChannels(void) { return audio_channels; }
   int GetAudioBits(void) { return audio_bits; }
@@ -95,7 +95,7 @@ public:
   int GetTimeBase(void) { return time_base; }
   int GetTimeInterval(void) { return time_interval; }
   
-  // AVI ƒwƒbƒ_‚Ì’†‚Ì‰f‘œ•”•ª‚Ìƒwƒbƒ_‚ğ‘‚­
+  // AVI ãƒ˜ãƒƒãƒ€ã®ä¸­ã®æ˜ åƒéƒ¨åˆ†ã®ãƒ˜ãƒƒãƒ€ã‚’æ›¸ã
   BOOL WriteHeader(File *ofp)
   {
     ofp->write_FOURCC("LIST");
@@ -145,7 +145,7 @@ public:
     return TRUE;
   }
   
-  // Ÿ‚ÌƒtƒŒ[ƒ€‚ÌŠÔ‚ğ•Ô‚·
+  // æ¬¡ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ™‚é–“ã‚’è¿”ã™
   double GetTime(void)
   {
     if (movie_record_index == num_of_movie_record)
@@ -153,7 +153,7 @@ public:
     return (double)movie_record[movie_record_index].time / time_base;
   }
   
-  // Ÿ‚ÌƒtƒŒ[ƒ€‚Ì‚ªƒL[ƒtƒŒ[ƒ€‚©‚Ç‚¤‚©
+  // æ¬¡ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®ãŒã‚­ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã©ã†ã‹
   BOOL IsKeyFrame(void)
   {
     if (movie_record_index == num_of_movie_record)
@@ -161,7 +161,7 @@ public:
     return 0 <= movie_record[movie_record_index].start;
   }
   
-  // ‰f‘œ•”•ª‚ğ‘‚­
+  // æ˜ åƒéƒ¨åˆ†ã‚’æ›¸ã
   BOOL WriteMovieFrame(File *ofp)
   {
     if (movie_record_index == num_of_movie_record)
@@ -172,13 +172,13 @@ public:
     long check_00dc = ofp->check_length();
     ifp->jump_to(r->address);
     
-    // ‰æ‘œƒwƒbƒ_ (”’l‚Í big-endien)
-    // WORD: 0x0000:ƒL[ƒtƒŒ[ƒ€ 0x0100:ƒL[ƒtƒŒ[ƒ€‚Å‚Í‚È‚¢
-    // WORD: ‰æ‘œ©‘Ì‚ÌƒoƒCƒg” - 8
-    // WORD: ‰æ‘œ‚Ì•
-    // WORD: ‰æ‘œ‚Ì‚‚³
-    // WORD: “ä (0x0001 ‚© 0x0002 ‚ç‚µ‚¢)
-    // WORD: “ä (avi ‚É‚·‚é‚Æ‚«‚ÍØ‚è—‚Æ‚·)
+    // ç”»åƒãƒ˜ãƒƒãƒ€ (æ•°å€¤ã¯ big-endien)
+    // WORD: 0x0000:ã‚­ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ  0x0100:ã‚­ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã¯ãªã„
+    // WORD: ç”»åƒè‡ªä½“ã®ãƒã‚¤ãƒˆæ•° - 8
+    // WORD: ç”»åƒã®å¹…
+    // WORD: ç”»åƒã®é«˜ã•
+    // WORD: è¬ (0x0001 ã‹ 0x0002 ã‚‰ã—ã„)
+    // WORD: è¬ (avi ã«ã™ã‚‹ã¨ãã¯åˆ‡ã‚Šè½ã¨ã™)
     
     check_buf(r->size);
     ifp->read_BYTES(buf, r->size);
@@ -209,7 +209,7 @@ public:
     return TRUE;
   }
 
-  // ƒwƒbƒ_‚ğ“Ç‚Ş
+  // ãƒ˜ãƒƒãƒ€ã‚’èª­ã‚€
   BOOL ReadHeader(int assume_fps)
   {
     DWORD magic = ifp->read_DWORD_b();
@@ -227,7 +227,7 @@ public:
     else
     {
       ifp->read_skip(4);
-      if (ifp->read_DWORD_b() == dword('1', '.', '0', '9')) // Hƒ”ƒ@ 2nd ‘Îô
+      if (ifp->read_DWORD_b() == dword('1', '.', '0', '9')) // å·¥ãƒ´ã‚¡ 2nd å¯¾ç­–
       {
 	ifp->jump_to(4);
 	read_header_cpk(total_movie_time, total_audio_size, TRUE);
@@ -264,13 +264,13 @@ public:
       if (0 < ti)
       {
 	time_interval = ti;
-	printf(", but assume %gfps\n", (double)time_base / time_interval);
+	printf(", but assume %gfpsÂ¥n", (double)time_base / time_interval);
       }
       else
-	printf(", failed to assume %gfps\n", (double)assume_fps);
+	printf(", failed to assume %gfpsÂ¥n", (double)assume_fps);
     }
     else
-      printf("\n");
+      printf("Â¥n");
 
     while (time_base < time_interval)
       time_interval /= 2;
@@ -320,7 +320,7 @@ public:
     audio_record = new Record[num_of_record];
     
     int initial_time_interval = 0;
-    time_interval = time_base * 3600; // ˆêŠÔ
+    time_interval = time_base * 3600; // ä¸€æ™‚é–“
     
     for (int i = 0; i < num_of_record; i++)
     {
@@ -368,7 +368,7 @@ public:
 
 
   long avi_chunk_start(const char *chunk_name)
-    // chunk ‚ÌI‚í‚è‚ğ•Ô‚·
+    // chunk ã®çµ‚ã‚ã‚Šã‚’è¿”ã™
   {
     if (ifp->read_DWORD_b() != dword(chunk_name))
       ERROR(chunk_name, " not found: this is not AVI");
@@ -377,9 +377,9 @@ public:
   }
 
   
-  // LIST ('hdrl' ‚È‚Ç
+  // LIST ('hdrl' ãªã©
   long avi_chunk_start(const char *chunk_name, const char *sub_name)
-    // chunk ‚ÌI‚í‚è‚ğ•Ô‚·
+    // chunk ã®çµ‚ã‚ã‚Šã‚’è¿”ã™
   {
     long end_of_chunk = avi_chunk_start(chunk_name);
     if (ifp->read_DWORD_b() != dword(sub_name))
@@ -516,7 +516,7 @@ public:
 	
 	offset += offset_base;
 	
-	if ((ckid & ~0xffff) == dword('0', '1', 0, 0)
+	if ((ckid & â€¾0xffff) == dword('0', '1', 0, 0)
 	    /* ckid == dword("01wb") */)
 	{
 	  audio_record[num_of_audio_record].address = offset;
@@ -527,7 +527,7 @@ public:
 	  num_of_audio_record++;
 	  total_audio_size += length;
 	}
-	else if ((ckid & ~0xffff) == dword('0', '0', 0, 0)
+	else if ((ckid & â€¾0xffff) == dword('0', '0', 0, 0)
 		 /* ckid == dword("00dc") */)
 	{
 	  if (0 < num_of_movie_record &&

@@ -36,13 +36,13 @@ const int FALSE = 0;
 
 inline void ERROR(const char *message)
 {
-  printf("acpk2avi: %s.\n", message);
+  printf("acpk2avi: %s.¥n", message);
   exit(1);
 }
 
 inline void ERROR(const char *message1, const char *message2)
 {
-  printf("acpk2avi: %s%s.\n", message1, message2);
+  printf("acpk2avi: %s%s.¥n", message1, message2);
   exit(1);
 }
 
@@ -62,11 +62,11 @@ struct AviIndex // for idx1
   
   AviIndex(Type t, long a, long s, double ti)
     : type(t), address(a), size(s), time(ti), next(NULL) { }
-  ~AviIndex() { delete next; }
+  ‾AviIndex() { delete next; }
 } *avi_index;
 
 
-// avi_index �̍Ō�ɂɗv�f��������
+// avi_index の最後にに要素を加える
 inline AviIndex *add_avi_index(AviIndex::Type t,
 			       long a, long s, double ti = 0.0)
 {
@@ -79,7 +79,7 @@ inline AviIndex *add_avi_index(AviIndex::Type t,
 }
 
 
-// AVI �̃w�b�_������
+// AVI のヘッダを書く
 long write_avi_header(File *ofp, Movie *movie, Audio *audio)
 {
   ofp->jump_to(0);
@@ -119,7 +119,7 @@ long write_avi_header(File *ofp, Movie *movie, Audio *audio)
 }
 
 
-// AVI ������
+// AVI を書く
 void write_avi(File *ofp, Movie *movie, Audio *audio,
 	       double delay, double extend)
 {
@@ -138,7 +138,7 @@ void write_avi(File *ofp, Movie *movie, Audio *audio,
       AviIndex *last_frame_ai = NULL;
       for (int i = 0; i < movie->TotalFrame; i++)
       {
-	printf("%d/%d\r", i, movie->TotalFrame);
+	printf("%d/%d¥r", i, movie->TotalFrame);
 	fflush(stdout);
 	
 	double frame_sec = movie->GetTime() +
@@ -208,7 +208,7 @@ void write_avi(File *ofp, Movie *movie, Audio *audio,
 	}
       }
       
-      printf("%d/%d wrote movie:%.2fsec audio:%.2fsec\n",
+      printf("%d/%d wrote movie:%.2fsec audio:%.2fsec¥n",
 	     movie->TotalFrame, movie->TotalFrame, movie_time, audio_time);
       fflush(stdout);
     }
@@ -222,7 +222,7 @@ void write_avi(File *ofp, Movie *movie, Audio *audio,
     double movie_time = 0.0;
     for (; ai; ai = ai->next)
     {
-//      printf("%d, address=%ld, size=%ld, time=%g, base=%d, interval=%d\n",
+//      printf("%d, address=%ld, size=%ld, time=%g, base=%d, interval=%d¥n",
 //	     ai->type, ai->address, ai->size, ai->time,
 //	     movie->GetTimeBase(), movie->GetTimeInterval());
       if (ai->type == AviIndex::Audio)
@@ -241,7 +241,7 @@ void write_avi(File *ofp, Movie *movie, Audio *audio,
 	  n = 1;
 	for (int j = 0; j < n; j++)
 	{
-//	  printf("%d\n", j);
+//	  printf("%d¥n", j);
 	  movie->TotalFrame++;
 	  ofp->write_FOURCC("00dc");       // ckid
 	  if (ai->type == AviIndex::ImageKey)
@@ -269,8 +269,8 @@ int main(int argc, char *argv[])
   int r = 0;
   
   printf(
-    "Another convertor from CPK to AVI. V1.19 Copyright (C) 1997-1998, GANA, Nishi\n"
-    "       SEGA Saturn Cinepak (*.cpk) / ADPCM (*.adp) -> MS Windows AVI (*.avi)\n"
+    "Another convertor from CPK to AVI. V1.19 Copyright (C) 1997-1998, GANA, Nishi¥n"
+    "       SEGA Saturn Cinepak (*.cpk) / ADPCM (*.adp) -> MS Windows AVI (*.avi)¥n"
     );
   char *filename_movie;
   char *filename_audio = NULL;
@@ -325,17 +325,17 @@ int main(int argc, char *argv[])
   }
   else
   {
-    printf("usage:\n"
-	   "\tacpk2avi [<OPTIONS>] <INPUT.{cpk|avi}> [<INPUT.{adp|wav}>] <OUTPUT.avi>\n"
-	   "\tacpk2avi <INPUT.adp> <OUTPUT.wav>\n"
-	   "options:\n"
-	   "\t-msadpcm       compress audio by MS-ADPCM\n"
-	   "\t-xaadpcm       secret option\n"
-	   "\t+<DELAY>       delay movie <DELAY> sec\n"
-	   "\t-<DELAY>       delay audio <DELAY> sec\n"
-	   "\t-e<EXTEND>     extend avi <EXTEND> sec\n"
-	   "\t-fps<FPS>      assume <FPS> fps\n"
-	   "\t-frequency<Hz> assume audio frequency as <Hz> Hz\n"
+    printf("usage:¥n"
+	   "¥tacpk2avi [<OPTIONS>] <INPUT.{cpk|avi}> [<INPUT.{adp|wav}>] <OUTPUT.avi>¥n"
+	   "¥tacpk2avi <INPUT.adp> <OUTPUT.wav>¥n"
+	   "options:¥n"
+	   "¥t-msadpcm       compress audio by MS-ADPCM¥n"
+	   "¥t-xaadpcm       secret option¥n"
+	   "¥t+<DELAY>       delay movie <DELAY> sec¥n"
+	   "¥t-<DELAY>       delay audio <DELAY> sec¥n"
+	   "¥t-e<EXTEND>     extend avi <EXTEND> sec¥n"
+	   "¥t-fps<FPS>      assume <FPS> fps¥n"
+	   "¥t-frequency<Hz> assume audio frequency as <Hz> Hz¥n"
       );
     return 1;
   }
@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
   File ifp_movie(fopen(filename_movie, "rb"));
   if (!ifp_movie.fp)
   {
-    printf("%s: cannot open file.\n", filename_movie);
+    printf("%s: cannot open file.¥n", filename_movie);
     return 1;
   }
   Movie movie(&ifp_movie);
@@ -354,7 +354,7 @@ int main(int argc, char *argv[])
     ifp_movie.fclose();
     if (argc == 2)
     {
-      printf("\r");
+      printf("¥r");
       fflush(stdout);
       return adp2wav_main(argc + 1, argv - 1);
     }
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
     ifp_audio.fp = fopen(filename_audio, "rb");
     if (!ifp_audio.fp)
     {
-      printf("%s: cannot open file.\n", filename_audio);
+      printf("%s: cannot open file.¥n", filename_audio);
       ifp_movie.fclose();
       return 1;
     }
@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
   File ofp = fopen(filename_avi, "wb");
   if (!ofp.fp)
   {
-    printf("%s: cannot open file.\n", filename_avi);
+    printf("%s: cannot open file.¥n", filename_avi);
     ifp_movie.fclose();
     if (filename_audio)
       ifp_audio.fclose();

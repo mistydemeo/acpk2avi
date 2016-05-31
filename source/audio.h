@@ -31,11 +31,11 @@ class Audio
   BOOL does_output_as_msadpcm; // if use msadpcm compression
   BOOL does_output_as_xaadpcm; // if use xaadpcm compression
   
-  // Movie —pƒf[ƒ^
+  // Movie ç”¨ãƒ‡ãƒ¼ã‚¿
   Movie::Record *movie_record;
   int movie_num_of_record;
 
-  // ADP —pƒf[ƒ^
+  // ADP ç”¨ãƒ‡ãƒ¼ã‚¿
   int adp_bits;
   long adp_num_of_blocks;
   INT16 adp_pcm_l[28];
@@ -43,7 +43,7 @@ class Audio
   int adp_samples_per_block;
   int adp_delay_blocks;
   
-  // WAV —pƒf[ƒ^
+  // WAV ç”¨ãƒ‡ãƒ¼ã‚¿
   int wav_wFormatTag;
   int wav_nChannels;
   int wav_nSamplesPerSec;
@@ -52,7 +52,7 @@ class Audio
   int wav_wBitsPerSample;
   int wav_total_size;
 
-  // ƒoƒbƒtƒ@
+  // ãƒãƒƒãƒ•ã‚¡
   BYTE *read_audio_buf;
   int sizeof_read_audio_buf;
   int valid_length_of_read_audio_buf;
@@ -61,7 +61,7 @@ class Audio
   int sizeof_buf;
 
 private:
-  // read_audio_buf ‚É size ƒoƒCƒg“ü‚é‚æ‚¤‚É’²ß‚·‚é
+  // read_audio_buf ã« size ãƒã‚¤ãƒˆå…¥ã‚‹ã‚ˆã†ã«èª¿ç¯€ã™ã‚‹
   void check_read_audio_buf(int size)
   {
     if (sizeof_read_audio_buf < size)
@@ -71,7 +71,7 @@ private:
     }
   }
   
-  // buf ‚É size ƒoƒCƒg“ü‚é‚æ‚¤‚É’²ß‚·‚é
+  // buf ã« size ãƒã‚¤ãƒˆå…¥ã‚‹ã‚ˆã†ã«èª¿ç¯€ã™ã‚‹
   void check_buf(int size)
   {
     if (sizeof_buf < size)
@@ -84,7 +84,7 @@ private:
   // bytes / sample
   int bytes_per_sample(void) { return channels * bits / 8; }
   
-  // samples ‚¾‚¯“WŠJ‚µ‚Ä buf ‚É•Ô‚·
+  // samples ã ã‘å±•é–‹ã—ã¦ buf ã«è¿”ã™
   BOOL read_audio(int &read_samples)
   {
     int samples = read_samples;
@@ -117,7 +117,7 @@ private:
 	  valid_length_of_read_audio_buf = 0;
 	}
 
-      // Movie ‚Ì‰¹•”•ª‚ğ“Ç‚Ş
+      // Movie ã®éŸ³éƒ¨åˆ†ã‚’èª­ã‚€
       if (type == TypeMOVIE)
       {
 	if (movie_num_of_record == 0)
@@ -182,7 +182,7 @@ private:
 	movie_record++;
       }
       
-      // ADP ‚Ì XA ADPCM ‚ğ“Ç‚Ş
+      // ADP ã® XA ADPCM ã‚’èª­ã‚€
       else if (type == TypeADP)
       {
 	if (!adp_num_of_blocks)
@@ -226,7 +226,7 @@ private:
 	    }
       }
       
-      // WAV ‚Ì‰¹•”•ª‚ğ“Ç‚Ş
+      // WAV ã®éŸ³éƒ¨åˆ†ã‚’èª­ã‚€
       else if (type == TypeWAV)
       {
 	if (wav_total_size <= 0)
@@ -256,14 +256,14 @@ public:
       max_size(0),
       does_output_as_msadpcm(FALSE),
       does_output_as_xaadpcm(FALSE),
-      // Movie —pƒf[ƒ^
+      // Movie ç”¨ãƒ‡ãƒ¼ã‚¿
       movie_record(NULL),
       movie_num_of_record(0),
-      // ADP —pƒf[ƒ^
+      // ADP ç”¨ãƒ‡ãƒ¼ã‚¿
       adp_bits(4),
       adp_num_of_blocks(0),
       adp_delay_blocks(0),
-      // WAV —pƒf[ƒ^
+      // WAV ç”¨ãƒ‡ãƒ¼ã‚¿
       wav_wFormatTag(0),
       wav_nChannels(0),
       wav_nSamplesPerSec(0),
@@ -271,7 +271,7 @@ public:
       wav_nBlockAlign(0),
       wav_wBitsPerSample(0),
       wav_total_size(0),
-      // ƒoƒbƒtƒ@
+      // ãƒãƒƒãƒ•ã‚¡
       read_audio_buf(NULL),
       sizeof_read_audio_buf(0),
       valid_length_of_read_audio_buf(0),
@@ -284,23 +284,23 @@ public:
     adp_pcm_r[27] = 0;
   }
   
-  ~Audio()
+  â€¾Audio()
   {
     delete [] read_audio_buf;
     delete [] buf;
   }
 
-  // ‰¹ºƒf[ƒ^‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©
+  // éŸ³å£°ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹
   BOOL DoesExist(void) { return type != TypeNONE; }
   
-  // ‚·‚Å‚É‘‚«‚ñ‚¾‰¹ºƒf[ƒ^ƒ`ƒƒƒ“ƒN‚Ì‚¤‚¿‚ÅÅ‘åƒTƒCƒYƒ`ƒƒƒ“ƒN‚ÌƒTƒCƒY
+  // ã™ã§ã«æ›¸ãè¾¼ã‚“ã éŸ³å£°ãƒ‡ãƒ¼ã‚¿ãƒãƒ£ãƒ³ã‚¯ã®ã†ã¡ã§æœ€å¤§ã‚µã‚¤ã‚ºãƒãƒ£ãƒ³ã‚¯ã®ã‚µã‚¤ã‚º
   int GetMaxSize(void) { return max_size; }
 
-  // sec •b’x‚ç‚¹‚é‚æ‚¤‚Éİ’è
+  // sec ç§’é…ã‚‰ã›ã‚‹ã‚ˆã†ã«è¨­å®š
   void SetAudioDelay(double sec)
   {
-    // SetMovie ‚Ü‚½‚Í ReadHeader ‚æ‚è‚àŒã‚Å
-    // WriteAudio ‚æ‚è‘O‚Å‚È‚¢‚Æ‚È‚¢‚ÆˆÓ–¡‚ª‚È‚¢
+    // SetMovie ã¾ãŸã¯ ReadHeader ã‚ˆã‚Šã‚‚å¾Œã§
+    // WriteAudio ã‚ˆã‚Šå‰ã§ãªã„ã¨ãªã„ã¨æ„å‘³ãŒãªã„
     if (0 < sec && DoesExist())
       if (does_output_as_xaadpcm)
 	adp_delay_blocks = (int)(sec * rate / adp_samples_per_block);
@@ -314,13 +314,13 @@ public:
       }
   }
 
-  // MS-ADPCM ‚Åo—Í‚·‚é‚©‚Ç‚¤‚©İ’è‚·‚é
+  // MS-ADPCM ã§å‡ºåŠ›ã™ã‚‹ã‹ã©ã†ã‹è¨­å®šã™ã‚‹
   void SetDoesOutputAsMsadpcm(BOOL _does_output_as_msadpcm)
   {
     does_output_as_msadpcm = _does_output_as_msadpcm;
   }
   
-  // XA-ADPCM ‚Åo—Í‚·‚é‚©‚Ç‚¤‚©İ’è‚·‚é
+  // XA-ADPCM ã§å‡ºåŠ›ã™ã‚‹ã‹ã©ã†ã‹è¨­å®šã™ã‚‹
   void SetDoesOutputAsXaadpcm(BOOL _does_output_as_xaadpcm)
   {
     does_output_as_xaadpcm = _does_output_as_xaadpcm;
@@ -328,17 +328,17 @@ public:
       ERROR("-xaadpcm error: cannot use -xaadpcm option without ADP audio file");
   }
 
-  // ü”g”‚ğ‹­§“I‚Éİ’è
+  // å‘¨æ³¢æ•°ã‚’å¼·åˆ¶çš„ã«è¨­å®š
   void SetFrequency(int rate)
   {
     if (0 < rate)
     {
       this->rate = rate;
-      printf("\tassume audio frequency as %dHz.\n", rate);
+      printf("Â¥tassume audio frequency as %dHz.Â¥n", rate);
     }
   }
   
-  // ‰¹•”•ª‚ğ‘‚­
+  // éŸ³éƒ¨åˆ†ã‚’æ›¸ã
   BOOL WriteAudio(File *ofp, double &sec)
   {
     if (!DoesExist())
@@ -365,11 +365,11 @@ public:
     ofp->write_FOURCC("01wb");
     long check_01wb = ofp->check_length();
     
-    long wrote_audio_size; // ‘‚«‚ñ‚¾ƒTƒCƒY‚Ì‚¤‚¿A‰¹‚Ì•”•ª
+    long wrote_audio_size; // æ›¸ãè¾¼ã‚“ã ã‚µã‚¤ã‚ºã®ã†ã¡ã€éŸ³ã®éƒ¨åˆ†
     if (does_output_as_msadpcm)
     {
       int n = (int)(sec * rate) / mspb;
-      // ã‚Ì‚Í (sec * rate) ‚Å‚ ‚Á‚ÄA(samples) ‚Æ‘‚¢‚Ä‚Í‚¢‚¯‚È‚¢
+      // ä¸Šã®ã¯ (sec * rate) ã§ã‚ã£ã¦ã€(samples) ã¨æ›¸ã„ã¦ã¯ã„ã‘ãªã„
       for (int i = 0; i < n; i++)
 	msadpcm_encode(ofp, buf + mspb * bytes_per_sample() * i);
       wrote_audio_size = n * msadpcm_nBlockAlign();
@@ -413,7 +413,7 @@ public:
       ofp->write_BYTES(buf, wrote_audio_size);
     }
     
-    int wrote_length = ofp->write_length(check_01wb); // ‘‚«‚ñ‚¾ƒTƒCƒY
+    int wrote_length = ofp->write_length(check_01wb); // æ›¸ãè¾¼ã‚“ã ã‚µã‚¤ã‚º
     if (max_size < wrote_length)
       max_size = wrote_length;
     total_size += wrote_audio_size;
@@ -423,7 +423,7 @@ public:
     return TRUE;
   }
 
-  // AVI ƒwƒbƒ_‚Ì’†‚Ì‰¹º•”•ª‚Ìƒwƒbƒ_‚ğ‘‚­
+  // AVI ãƒ˜ãƒƒãƒ€ã®ä¸­ã®éŸ³å£°éƒ¨åˆ†ã®ãƒ˜ãƒƒãƒ€ã‚’æ›¸ã
   BOOL WriteHeader(File *ofp)
   {
     if (!DoesExist())
@@ -511,7 +511,7 @@ public:
     return TRUE;
   }
   
-  // Movie ‚ª‰¹º‚ğ‚Á‚Ä‚¢‚éê‡
+  // Movie ãŒéŸ³å£°ã‚’æŒã£ã¦ã„ã‚‹å ´åˆ
   void SetMovie(Movie *movie)
   {
     ifp                 = movie->GetIfp();
@@ -524,11 +524,11 @@ public:
     type = channels ? TypeMOVIE : TypeNONE;
   }
 
-  // ‰¹ºƒwƒbƒ_‚ğ“Ç‚Ş
+  // éŸ³å£°ãƒ˜ãƒƒãƒ€ã‚’èª­ã‚€
   void ReadHeader(void)
   {
     char buf[5];
-    buf[4] = '\0';
+    buf[4] = 'Â¥0';
     
     DWORD magic = ifp->read_DWORD_b();
     if (magic == dword('F', 'O', 'R', 'M'))
@@ -563,7 +563,7 @@ public:
       
       bits = 16;
       
-      printf("SEGA Saturn XA-ADPCM AIFF, %s %dbits %dHz, %.2fsec\n",
+      printf("SEGA Saturn XA-ADPCM AIFF, %s %dbits %dHz, %.2fsecÂ¥n",
 	     (channels == 2) ? "Stereo" : "Monaural",
 	     adp_bits, rate, sampleframes / (double)rate);
     }
@@ -599,7 +599,7 @@ public:
       rate       = wav_nSamplesPerSec;
       bits       = wav_wBitsPerSample;
       
-      printf("WAVE, %s %dbits %dHz, %.2fsec\n",
+      printf("WAVE, %s %dbits %dHz, %.2fsecÂ¥n",
 	     (channels == 2) ? "Stereo" : "Monaural",
 	     bits, rate, wav_total_size / (double)wav_nAvgBytesPerSec);
     }
@@ -610,7 +610,7 @@ public:
   
 private:
   
-  // MSADPCM —pƒf[ƒ^
+  // MSADPCM ç”¨ãƒ‡ãƒ¼ã‚¿
   static const INT16 msadpcm_coef1[MSADPCM_NUM_COEF];
   static const INT16 msadpcm_coef2[MSADPCM_NUM_COEF];
 

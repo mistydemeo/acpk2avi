@@ -174,6 +174,7 @@ int main(int argc, char *argv[])
 	if (fp_adp == NULL || fp_wav == NULL)
 	{
 		fprintf(stderr, "Error: cannot open file.\n");
+		return 1;
 	}
 
 	num_block = read_aiff_header(fp_adp, &freq, &channels);
@@ -313,7 +314,7 @@ long read_aiff_header(FILE *fp_adp, long *freq, int *channels)
 	size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
 
 	fread(d, 8, 1, fp_adp);
-	block_size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
+	block_size = 0x1000000 * (unsigned long)d[4] + 0x10000 * (unsigned long)d[5] + 0x100 * (unsigned long)d[6] + (unsigned long)d[7];
 	if (block_size != sizeof(XA_BLOCK))
 	{
 		fprintf(stderr, "unsupported XA format.\n");

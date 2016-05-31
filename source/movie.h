@@ -264,13 +264,13 @@ public:
       if (0 < ti)
       {
 	time_interval = ti;
-	printf(", but assume %gfps¥n", (double)time_base / time_interval);
+	printf(", but assume %gfps\n", (double)time_base / time_interval);
       }
       else
-	printf(", failed to assume %gfps¥n", (double)assume_fps);
+	printf(", failed to assume %gfps\n", (double)assume_fps);
     }
     else
-      printf("¥n");
+      printf("\n");
 
     while (time_base < time_interval)
       time_interval /= 2;

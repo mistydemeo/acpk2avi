@@ -334,7 +334,7 @@ public:
     if (0 < rate)
     {
       this->rate = rate;
-      printf("¥tassume audio frequency as %dHz.¥n", rate);
+      printf("\tassume audio frequency as %dHz.\n", rate);
     }
   }
   
@@ -528,7 +528,7 @@ public:
   void ReadHeader(void)
   {
     char buf[5];
-    buf[4] = '¥0';
+    buf[4] = '\0';
     
     DWORD magic = ifp->read_DWORD_b();
     if (magic == dword('F', 'O', 'R', 'M'))
@@ -563,7 +563,7 @@ public:
       
       bits = 16;
       
-      printf("SEGA Saturn XA-ADPCM AIFF, %s %dbits %dHz, %.2fsec¥n",
+      printf("SEGA Saturn XA-ADPCM AIFF, %s %dbits %dHz, %.2fsec\n",
 	     (channels == 2) ? "Stereo" : "Monaural",
 	     adp_bits, rate, sampleframes / (double)rate);
     }
@@ -599,7 +599,7 @@ public:
       rate       = wav_nSamplesPerSec;
       bits       = wav_wBitsPerSample;
       
-      printf("WAVE, %s %dbits %dHz, %.2fsec¥n",
+      printf("WAVE, %s %dbits %dHz, %.2fsec\n",
 	     (channels == 2) ? "Stereo" : "Monaural",
 	     bits, rate, wav_total_size / (double)wav_nAvgBytesPerSec);
     }

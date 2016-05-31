@@ -78,7 +78,7 @@
 	れた状態で, 以下のようにすると, オープニングの AVI がカレント
 	ディレクトリに作成されます. 
 
-	  acpk2avi.exe Q:¥4001.CPK Q:¥4000.ADP EvaOpening.avi
+	  acpk2avi.exe Q:\4001.CPK Q:\4000.ADP EvaOpening.avi
 
 	・サターン版「新世紀工ヴァンゲリオン」の 4001.CPK と音楽 CD の
 	「NEON GENESIS EVANGELION II」のトラック 2 (TRACK2.WAV) からオー
@@ -167,7 +167,7 @@
 
 	acpk2avi.exe は Visual C++ 5.0 がインストールされていれば, 
 
-	C:¥acpk2avi¥source¥> nmake -f Makefile.vc nodebug=1
+	C:\acpk2avi\source\> nmake -f Makefile.vc nodebug=1
 
 	などとすれば作成できます. (同梱の acpk2avi.exe は上記のように
 	して作成されています)

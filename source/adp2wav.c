@@ -161,11 +161,11 @@ int main(int argc, char *argv[])
 	INT16 pcm_l[28];
 	INT16 pcm_r[28];
 
-	fprintf(stderr, "adp2wav version 0.22  Copyright (C) 1997 Nobuyuki NISHIZAWA¥n");
+	fprintf(stderr, "adp2wav version 0.22  Copyright (C) 1997 Nobuyuki NISHIZAWA\n");
 
 	if (argc != 3)
 	{
-		fprintf(stderr, "Usage: adp2wav <input.adp> <output.wav>¥n");
+		fprintf(stderr, "Usage: adp2wav <input.adp> <output.wav>\n");
 		return 255;
 	}
 
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 	fp_wav = fopen(argv[2], "wb");
 	if (fp_adp == NULL || fp_wav == NULL)
 	{
-		fprintf(stderr, "Error: cannot open file.¥n");
+		fprintf(stderr, "Error: cannot open file.\n");
 	}
 
 	num_block = read_aiff_header(fp_adp, &freq, &channels);
@@ -276,38 +276,38 @@ long read_aiff_header(FILE *fp_adp, long *freq, int *channels)
 	fread(d, 12, 1, fp_adp);
 	if (memcmp(d, form, 4) != 0 || memcmp(d + 8, aiff, 4) != 0)
 	{
-		fprintf(stderr, "not aiff file.¥n");
+		fprintf(stderr, "not aiff file.\n");
 		exit(255);
 	}
 
 	fread(d, 8, 1, fp_adp);
 	if (memcmp(d, comm, 4) != 0)
 	{
-		fprintf(stderr, "unsupported aiff file.¥n");
+		fprintf(stderr, "unsupported aiff file.\n");
 		exit(255);
 	}
 	size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
 	fread(d, size, 1, fp_adp);
 
 	*channels = 0x100 * d[0] + d[1];
-	fprintf(stderr, "Channels : %d¥n", *channels);
+	fprintf(stderr, "Channels : %d\n", *channels);
 	
 	samples = 0x1000000 * d[2] + 0x10000 * d[3] + 0x100 * d[4] + d[5];
-	fprintf(stderr, "Samples : %ld¥n", samples);
+	fprintf(stderr, "Samples : %ld\n", samples);
 
 	bitspersample = 0x100 * d[6] + d[7];
-	fprintf(stderr, "bits/sample : %d¥n", bitspersample);
+	fprintf(stderr, "bits/sample : %d\n", bitspersample);
 
 	shift = 0x100 * (d[8] & 0x7f) + d[9];
 	f = 0x1000000 * d[10] + 0x10000 * d[11] + 0x100 * d[12] + d[13];
 	f >>= (0x401e - shift);
 	*freq = (long)f;
-	fprintf(stderr, "Sampling frequency : %ld¥n", *freq);
+	fprintf(stderr, "Sampling frequency : %ld\n", *freq);
 
 	fread(d, 8, 1, fp_adp);
 	if (memcmp(d, apcm, 4) != 0)
 	{
-		fprintf(stderr, "not ADPCM(XA) file.¥n");
+		fprintf(stderr, "not ADPCM(XA) file.\n");
 		exit(255);
 	}
 	size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
@@ -316,7 +316,7 @@ long read_aiff_header(FILE *fp_adp, long *freq, int *channels)
 	block_size = 0x1000000 * d[4] + 0x10000 * d[5] + 0x100 * d[6] + d[7];
 	if (block_size != sizeof(XA_BLOCK))
 	{
-		fprintf(stderr, "unsupported XA format.¥n");
+		fprintf(stderr, "unsupported XA format.\n");
 		exit(255);
 	}
 	
@@ -404,7 +404,7 @@ int get_adpcm_filter(XA_ADPCM *adpcm, int unit)
 	if (adpcm->sf_and_filter[(unit / 4) * 8 + unit % 4] !=
 		adpcm->sf_and_filter[(unit / 4) * 8 + unit % 4 + 4])
 	{
-		fprintf(stderr, "CAUTION! Check scalefactor or filter value!¥n"); 
+		fprintf(stderr, "CAUTION! Check scalefactor or filter value!\n"); 
 	}	
 	return adpcm->sf_and_filter[4 + unit] >> 4;
 }
